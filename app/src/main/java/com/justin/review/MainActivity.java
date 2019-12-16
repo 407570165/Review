@@ -38,8 +38,15 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        Button button =findViewById(R.id.summit);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                caculate();
+            }
+        });
     }
-    public void caculate(View view) {
+    public void caculate() {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -63,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("每月抄表")
-                    .setMessage("費用: "+ outcome)
+                    .setMessage(getString(R.string.fee)+ outcome)
                     .setPositiveButton("ok", listener)
                     .show();
         }
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("格月抄表")
-                    .setMessage("費月:"+outcome)
+                    .setMessage(getString(R.string.fee1)+outcome)
                     .setPositiveButton("ok",listener)
                     .show();
         }
