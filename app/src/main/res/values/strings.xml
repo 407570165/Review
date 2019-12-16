@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Review</string>
+    <string name="action_settings">Settings</string>
+    <string name="monthly">Monthly</string>
+    <string name="everyothermonth">EveryOtherMonth</string>
+    <string name="fee">fee:</string>
+    <string name="fee1">fee:</string>
+    <string name="summit">Summit</string>
+</resources>
