@@ -2,6 +2,7 @@ package com.justin.review;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -68,11 +69,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (monthn >= 51) {
                 outcome = (monthn * 12.075f) - 110.25f;
             }
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("每月抄表")
-                    .setMessage(getString(R.string.fee)+ outcome)
-                    .setPositiveButton("ok", listener)
-                    .show();
+            Intent intent =new Intent(MainActivity.this,ResultActivity.class);
+            intent.putExtra("fee:",outcome);
+            startActivity(intent);
         }
         else if (!TextUtils.isEmpty(data1)) {
             float nextn = Float.parseFloat(next.getText().toString());
