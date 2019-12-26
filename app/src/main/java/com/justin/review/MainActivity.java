@@ -12,16 +12,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText month;
     private EditText next;
+    boolean isOn =false;
+    private String data;
+    private Switch aSwitch;
+    String TAG=MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         month = findViewById(R.id.monthly);
-        next = findViewById(R.id.next);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,58 +55,78 @@ public class MainActivity extends AppCompatActivity {
                 caculate();
             }
         });
+        aSwitch = findViewById(R.id.switch2);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            isOn=isChecked;
+            TextView textView =findViewById(R.id.type);
+            textView.setText(isOn?getString(R.string.every):getString(R.string.monthly));
+            }
+        });
+        Spinner spinner =findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG,getResources().getStringArray(R.array.cities)[position]);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
     public void caculate() {
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 month.setText("");
-                next.setText("");
             }
         };
-        String data = month.getText().toString();
-        String data1 =next.getText().toString();
-        if (!TextUtils.isEmpty(data)) {
-            float monthn = Float.parseFloat(data);
-            double outcome = 0;
-            if (monthn >= 1 && monthn <= 10) {
-                outcome = monthn * 7.35f;
-            } else if (monthn >= 11 && monthn <= 30) {
-                outcome = (monthn * 9.45f) - 21;
-            } else if (monthn >= 31 && monthn <= 50) {
-                outcome = (monthn * 11.55f) - 84;
-            } else if (monthn >= 51) {
-                outcome = (monthn * 12.075f) - 110.25f;
+        data = month.getText().toString();
+        if (isOn==false) {
+            if (!TextUtils.isEmpty(data)) {
+                float monthn = Float.parseFloat(data);
+                double outcome = 0;
+                if (monthn >= 1 && monthn <= 10) {
+                    outcome = monthn * 7.35f;
+                } else if (monthn >= 11 && monthn <= 30) {
+                    outcome = (monthn * 9.45f) - 21;
+                } else if (monthn >= 31 && monthn <= 50) {
+                    outcome = (monthn * 11.55f) - 84;
+                } else if (monthn >= 51) {
+                    outcome = (monthn * 12.075f) - 110.25f;
+                }
+                Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+                intent.putExtra("fee:", outcome);
+                startActivity(intent);
             }
-            Intent intent =new Intent(MainActivity.this,ResultActivity.class);
-            intent.putExtra("fee:",outcome);
-            startActivity(intent);
+        }else {
+                float monthn = Float.parseFloat(data);
+                double outcome = 0;
+                if (monthn >= 1 && monthn <= 20) {
+                    outcome = monthn * 7.35f;
+                } else if (monthn >= 21 && monthn <= 60) {
+                    outcome = monthn * 9.45f - 42;
+                } else if (monthn >= 61 && monthn <= 100) {
+                    outcome = monthn * 11.55f - 168;
+                } else {
+                    outcome = monthn * 12.075f - 220.5f;
+                }
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("格月抄表")
+                        .setMessage(getString(R.string.fee1) + outcome)
+                        .setPositiveButton("ok", listener)
+                        .show();
+
         }
-        else if (!TextUtils.isEmpty(data1)) {
-            float nextn = Float.parseFloat(next.getText().toString());
-            double outcome = 0;
-            if (nextn >= 1 && nextn <= 20) {
-                outcome = nextn * 7.35f;
-            } else if (nextn >= 21 && nextn <= 60) {
-                outcome = nextn * 9.45f - 42;
-            } else if (nextn >= 61 && nextn <= 100) {
-                outcome = nextn * 11.55f - 168;
-            } else {
-                outcome = nextn * 12.075f - 220.5f;
-            }
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("格月抄表")
-                    .setMessage(getString(R.string.fee1)+outcome)
-                    .setPositiveButton("ok",listener)
-                    .show();
-        }
-        else if (TextUtils.isEmpty(data)&&TextUtils.isEmpty(data1)){
+        /*else if (TextUtils.isEmpty(data)&&TextUtils.isEmpty(data1)){
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Fail")
                     .setMessage("Wrong Enter")
                     .setPositiveButton("ok",null)
                     .show();
-        }
+        }*/
     }
 
     @Override

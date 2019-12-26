@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Review</string>
+    <string name="everyothermonth">格月抄表</string>
+    <string name="fee">費用</string>
+    <string name="fee1">費用</string>
+    <string name="monthly">本月抄表</string>
+    <string name="summit">提交</string>
+    <string name="every">格月抄表</string>
+</resources>
